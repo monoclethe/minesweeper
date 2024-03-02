@@ -1,2 +1,0 @@
-# minesweeper
-Minesweeper Remake

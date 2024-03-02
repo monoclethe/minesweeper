@@ -1,0 +1,46 @@
+html {
+    background-color: #338133;
+    color: white;
+    font-family: sans-serif;
+}
+div, header {
+    background-color: #447044;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+header > * {
+    text-align: center;
+    margin: auto;
+}
+h1 {
+    margin: 0;
+    padding: 0;
+}
+.warning {
+    background-color: red;
+    text-align: center;
+    width: 100%;
+}
+.board {
+    width: auto;
+    height: auto;
+    margin: auto;
+    text-align: center;
+}
+td {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+}
+.unchecked {
+    background-color: #AAA;
+}
+.unchecked:hover {
+    background-color: #DDD;
+}
+tr:nth-child(2n) > .unchecked:nth-child(2n), tr:nth-child(2n-1) > .unchecked:nth-child(2n-1) {
+    background-color: #999;
+}
+tr:nth-child(2n) > .unchecked:nth-child(2n):hover, tr:nth-child(2n-1) > .unchecked:nth-child(2n-1):hover {
+    background-color: #DDD;
+}

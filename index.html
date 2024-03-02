@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monocle - Minesweeper</title>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.png">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div id="warning" class="warning">You must enable javascript to play this game.</div>
+    <header>
+        <h1>Monocle's Minesweeper</h1>
+        <p>definitely not so I can play this in class</p>
+    </header>
+    <div class="options">
+        <input type="number" id="mines" value="205">
+        <input type="number" id="dimX" value="32">
+        <input type="number" id="dimY" value="32">
+        <button onclick="start()">Start</button>
+    </div>
+    <div class="board" id="board"></div>
+</body>
+<script src="index.js"></script>
+</html>
