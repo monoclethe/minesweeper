@@ -3,36 +3,25 @@ warning.style = "display:none;";
 var dimX = document.getElementById("dimX");
 var dimY = document.getElementById("dimY");
 var board = document.getElementById("board");
-var mines = document.getElementById("mines");
 var minedisp = document.getElementById("minedisp");
-var timedisp = document.getElementById("timedisp")
+var difficulty = document.getElementById("difficulty");
+var ddisp = document.getElementById("ddisp");
 
-var timerAgent;
 var t = 0;
 var md = 0;
-
 const mod = [0, -1, 1, dimX.value, dimX.value - 1, dimX.value + 1, -dimX.value, -dimX.value - 1, -dimX.value + 1]
 var boardArray = []
+const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 function start () {
-    try{
-        clearInterval(timerAgent);
-    } catch {}
-    t = 0;
-    var timerAgent = setInterval(function () {
-        t++;
-        timedisp.innerHTML = t;
-    }, 1000)
     md = 0;
     let cx = dimX.value * dimY.value
-    mines.value = cx/5
-    document.getElementById("board").style="background-color:##447044;";
     boardArray = [];
     let boardTable = "<table id=\"gameTable\">"
-    let ratio = mines.value / (dimX.value * dimY.value);
-    for (let x=0; x < dimX.value; x++) {
+    let ratio = difficulty.value * 0.01;
+    for (let y=0; y < dimY.value; y++) {
         boardTable += "<tr>"
-        for (let y=0; y < dimY.value; y++) {
+        for (let x=0; x < dimX.value; x++) {
             if (Math.random() < ratio) {
                 boardArray.push(9);
                 md++;
@@ -71,7 +60,7 @@ function start () {
     clear(convertnumtoxy(n)[0], convertnumtoxy(n)[1]);
     clearAround(convertnumtoxy(n)[0], convertnumtoxy(n)[1]);
 
-    
+    document.getElementById("gameTable").style="border: 2px solid black;";
 }
 
 function countMines (x, y) {
@@ -105,13 +94,14 @@ function countMines (x, y) {
     }
 }
 
-function clearAround(x, y) {
+async function clearAround(x, y) {
     for (let i = -1; i < 2; i++) {
         for (let j = -1; j < 2; j++) {
             if (boardArray[convertxytonum(x + i, y + j)] === 0) {
                 const element = document.getElementById((x + i) + "," + (y + j));
                 if (element && element.classList.contains("unchecked")) {
                     clear(x + i, y + j);
+                    await sleep(10);
                     clearAround(x + i, y + j);
                 } 
             } else if (boardArray[convertxytonum(x + i, y + j)] !== 9){
@@ -149,6 +139,44 @@ function recieve (x, y) {
             gameEnd();
         } else if (boardArray[y * dimX.value + x] === 0) {
             clearAround(x, y);
+        } else {
+            let t = 0;
+            let b = [-1, 1, -1, 1];
+
+            if (y === 0) {
+                b[0] = 0;
+            }
+            if (y === dimY.value - 1) {
+                b[1] = 0;
+            }
+            if (x === 0) {
+                b[2] = 0;
+            }
+            if (x === dimX.value - 1) {
+                b[3] = 0
+            }
+            for (let i = b[0]; i <= b[1]; i++) {
+                for (let j = b[2]; j <= b[3]; j++) {
+                    if(document.getElementById((x+i) + "," + (y+j)).classList.contains("flag")) {
+                        t++;
+                    }
+                }
+            }
+            if (t === boardArray[y * dimX.value + x]) {
+                console.log("fulfilled!");
+                for (let i = b[0]; i <= b[1]; i++) {
+                    for (let j = b[2]; j <= b[3]; j++) {
+                        if (boardArray[(y+j) * dimX.value + x+i] === 9 && !document.getElementById((x+i) + "," + (y+j)).classList.contains("flag")) {
+                            gameEnd();
+                        } else if (!document.getElementById((x+i) + "," + (y+j)).classList.contains("flag")) {
+                            clear(x+i,y+j);
+                        } 
+                        if (boardArray[(y+j) * dimX.value + x+i] === 0) {
+                            clearAround(x+i, y+j)
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -168,11 +196,17 @@ function mark (x, y) {
     }
 }
 function gameEnd () {
-    clearInterval(timerAgent);
     for (let i = 0; i < dimX.value; i++) {
         for (let j = 0; j < dimY.value; j++) {
             clear(i, j);
-            document.getElementById("board").style="background-color:#FF0000;";
+            document.getElementById("gameTable").style="border: 2px solid red;";
         }
+    }
+}
+function ddispUpdate () {
+    if (difficulty.value >= 10) {
+        ddisp.innerHTML = difficulty.value;
+    } else {
+        ddisp.innerHTML = "0" + difficulty.value;
     }
 }

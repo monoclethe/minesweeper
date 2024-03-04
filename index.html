@@ -12,18 +12,21 @@
     <div id="warning" class="warning">You must enable javascript to play this game.</div>
     <header>
         <h1>Monocle's Minesweeper</h1>
-        <p>definitely not so I can play this in class</p>
     </header>
     <div class="options">
-        <input type="number" id="mines" value="205" hidden>
-        <input type="number" id="dimX" value="16">
-        <input type="number" id="dimY" value="32">
+        <label for="dimX">Width:</label>
+        <input type="number" id="dimX" value="32">
+        <label for="dimY">Height:</label>
+        <input type="number" id="dimY" value="16">
+        <label for="difficulty">(<span id=ddisp>20</span>%) Difficulty:</label>
+        <input type="range" min="0" max="100" value="20" id="difficulty" onchange="ddispUpdate();">
         <button onclick="start()">Start</button>
+        (12% - Easy | 16% - Normal | 20% - Expert)
     </div>
-    <div class="board" id="board"></div>
     <div>
         Mines: <span id="minedisp">N/A</span>
     </div>
+    <div class="board" id="board"></div>
 </body>
 <script src="index.js"></script>
 </html>
