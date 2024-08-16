@@ -4,6 +4,11 @@ A simple minesweeper remake, version 1.1 by Monocle
 
 ## Changelog
 
+### 1.1.1 - Bugfix
+
+Bugfixes:
+- Fixed number tiles on the edge of the board not clearing when clicked
+
 ### 1.1 - QoL Update + Bugfixes
 
 Bugfixes:

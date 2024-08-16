@@ -157,13 +157,16 @@ function recieve (x, y) {
             }
             for (let i = b[0]; i <= b[1]; i++) {
                 for (let j = b[2]; j <= b[3]; j++) {
-                    if(document.getElementById((x+i) + "," + (y+j)).classList.contains("flag")) {
-                        t++;
+                    try {
+                        if(document.getElementById((x+i) + "," + (y+j)).classList.contains("flag")) {
+                            t++;
+                        }
+                    } catch(err) {
+                        console.log(err);
                     }
                 }
             }
             if (t === boardArray[y * dimX.value + x]) {
-                console.log("fulfilled!");
                 for (let i = b[0]; i <= b[1]; i++) {
                     for (let j = b[2]; j <= b[3]; j++) {
                         if (boardArray[(y+j) * dimX.value + x+i] === 9 && !document.getElementById((x+i) + "," + (y+j)).classList.contains("flag")) {
