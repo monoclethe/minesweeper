@@ -134,50 +134,45 @@ function recieve (x, y) {
         document.getElementById(x + "," + y).classList.add("checked");
         document.getElementById(x + "," + y).classList.remove("unchecked");
         document.getElementById(x + "," + y).innerHTML = "<img src=\"images/tile" + boardArray[y * dimX.value + x] + ".png\">";
-        console.log(boardArray[y * dimX.value + x]);
-        if (boardArray[y * dimX.value + x] === 9) {
+        let tileType = boardArray[y * dimX.value + x];
+        if (tileType === 9) {
             gameEnd();
-        } else if (boardArray[y * dimX.value + x] === 0) {
+        } else if (tileType === 0) {
             clearAround(x, y);
         } else {
-            let t = 0;
-            let b = [-1, 1, -1, 1];
+            let aroundX = [0];
+            let aroundY = [0];
+            if (x !== 0) {
+                aroundX.push(-1);
+            }
+            if (x !== dimX.value - 1) {
+                aroundX.push(1);
+            }
+            if (y !== 0) {
+                aroundY.push(-1);
+            }
+            if (y !== dimY.value - 1) {
+                aroundY.push(1);
+            }
 
-            if (y === 0) {
-                b[0] = 0;
-            }
-            if (y === dimY.value - 1) {
-                b[1] = 0;
-            }
-            if (x === 0) {
-                b[2] = 0;
-            }
-            if (x === dimX.value - 1) {
-                b[3] = 0
-            }
-            for (let i = b[0]; i <= b[1]; i++) {
-                for (let j = b[2]; j <= b[3]; j++) {
-                    try {
-                        if(document.getElementById((x+i) + "," + (y+j)).classList.contains("flag")) {
-                            t++;
-                        }
-                    } catch(err) {
-                        console.log(err);
+            let uncheckedMines = false
+            let minesFlagged = 0;
+            for (let xMod = 0; xMod < aroundX.length; xMod++) {
+                for (let yMod = 0; yMod < aroundY.length; yMod++) {
+                    let testCell = document.getElementById((x + aroundX[xMod]) + "," + (y + aroundY[yMod]));
+                    if (testCell.classList.contains("flag")) {
+                        minesFlagged++;
+                    } else if (boardArray[(y + aroundY[yMod]) * dimX.value + (x + aroundX[xMod])] === 9) {
+                        uncheckedMines = true;
                     }
                 }
             }
-            if (t === boardArray[y * dimX.value + x]) {
-                for (let i = b[0]; i <= b[1]; i++) {
-                    for (let j = b[2]; j <= b[3]; j++) {
-                        if (boardArray[(y+j) * dimX.value + x+i] === 9 && !document.getElementById((x+i) + "," + (y+j)).classList.contains("flag")) {
-                            gameEnd();
-                        } else if (!document.getElementById((x+i) + "," + (y+j)).classList.contains("flag")) {
-                            clear(x+i,y+j);
-                        } 
-                        if (boardArray[(y+j) * dimX.value + x+i] === 0) {
-                            clearAround(x+i, y+j)
-                        }
-                    }
+
+            if (minesFlagged === tileType) {
+                if (uncheckedMines) {
+                    gameEnd();
+                } else {
+                    clearAround(x, y);
                 }
             }
         }
